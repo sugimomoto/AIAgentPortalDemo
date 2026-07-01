@@ -56,15 +56,15 @@
 
 ## フェーズ 2：フロー状態機械（TDD・fake timers）
 
-- [ ] T2-1 🔴　`useAgentFlow` テスト：初期 `[idle×5]`、step0→4 が processing→done の順に遷移
-- [ ] T2-2 🟢　`useAgentFlow` 実装
-- [ ] T2-3 🔴　`send` テスト：ユーザー発言追加・`querying`/`thinking` 立ち上げ・`sortMode` 反映
-- [ ] T2-4 🔴　④待機テスト：`consentGiven=false && requireConsent=true` で step3 が `waiting` 停止・`awaitingConsent=true`
-- [ ] T2-5 🔴　`approveConsent` テスト：step3→step4→`finish` 再開、`consentGiven` 保持で2回目は止まらない
-- [ ] T2-6 🔴　`runId` テスト：再送時に古い非同期処理が無効化される
-- [ ] T2-7 🟢　`useAgent`（`send`/`approveConsent`/`finish`・`runId`・`stepDelay`）実装 → 上記 green
-- [ ] T2-8 🔴🟢　`finish` テスト＆実装：タイプライター（22ms/文字）→ 250ms 後テーブル一括追加
-- [ ] T2-9 🔴🟢　`useAuth`（モック：`login`/`logout`/`selectUser`・履歴保持）テスト＆実装
+- [x] T2-1 🔴　`useAgentFlow` テスト：初期 `[idle×5]`、step0→4 が processing→done の順に遷移
+- [x] T2-2 🟢　`useAgentFlow` 実装
+- [x] T2-3 🔴　`send` テスト：ユーザー発言追加・`querying`/`thinking` 立ち上げ・`sortMode` 反映
+- [x] T2-4 🔴　④待機テスト：`consentGiven=false && requireConsent=true` で step3 が `waiting` 停止・`awaitingConsent=true`
+- [x] T2-5 🔴　`approveConsent` テスト：step3→step4→`finish` 再開、`consentGiven` 保持で2回目は止まらない
+- [x] T2-6 🔴　`runId` テスト：再送時に古い非同期処理が無効化される
+- [x] T2-7 🟢　`useAgent`（`send`/`approveConsent`/`finish`・`runId`・`stepDelay`）実装 → 上記 green
+- [x] T2-8 🔴🟢　`finish` テスト＆実装：タイプライター（22ms/文字）→ 250ms 後テーブル一括追加
+- [x] T2-9 🔴🟢　`useAuth`（モック：`login`/`logout`/`selectUser`・履歴保持）テスト＆実装
 
 ---
 
