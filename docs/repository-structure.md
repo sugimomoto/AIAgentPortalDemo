@@ -90,44 +90,44 @@ ai-agent-portal/
 
 Next.js App Router のルーティング。ページコンポーネントと API Routes を配置。
 
-| パス | 役割 |
-|------|------|
-| `app/page.tsx` | 認証状態チェック → `/login` または `/portal` へリダイレクト |
-| `app/login/page.tsx` | ログイン画面。MSALの `loginPopup()` を呼び出す |
-| `app/portal/page.tsx` | ポータル画面。Header / ChatPanel / InsideAgentPanel を並べる |
-| `app/api/agent/route.ts` | Foundry Agent API を呼び出し SSE でストリーミング返却 |
-| `app/api/auth/token/route.ts` | OBO トークン交換。クライアントシークレットはここにのみ置く |
+| パス                          | 役割                                                         |
+| ----------------------------- | ------------------------------------------------------------ |
+| `app/page.tsx`                | 認証状態チェック → `/login` または `/portal` へリダイレクト  |
+| `app/login/page.tsx`          | ログイン画面。MSALの `loginPopup()` を呼び出す               |
+| `app/portal/page.tsx`         | ポータル画面。Header / ChatPanel / InsideAgentPanel を並べる |
+| `app/api/agent/route.ts`      | Foundry Agent API を呼び出し SSE でストリーミング返却        |
+| `app/api/auth/token/route.ts` | OBO トークン交換。クライアントシークレットはここにのみ置く   |
 
 ### `src/components/`
 
 UI コンポーネント。3グループに分類。
 
-| グループ | 内容 |
-|---------|------|
-| `layout/` | ヘッダーなどページ共通の構造コンポーネント |
-| `chat/` | チャット UI 関連（メッセージ・入力・プリセット） |
-| `agent/` | Inside the Agent パネル関連（シーケンス図の描画） |
+| グループ  | 内容                                              |
+| --------- | ------------------------------------------------- |
+| `layout/` | ヘッダーなどページ共通の構造コンポーネント        |
+| `chat/`   | チャット UI 関連（メッセージ・入力・プリセット）  |
+| `agent/`  | Inside the Agent パネル関連（シーケンス図の描画） |
 
 ### `src/hooks/`
 
 状態管理とビジネスロジックをカスタムフックに分離。
 
-| フック | 役割 |
-|--------|------|
-| `useAuth` | MSAL の初期化・ログイン・ログアウト・トークン取得 |
-| `useAgent` | プロンプト送信・SSE 受信・メッセージ状態管理 |
+| フック         | 役割                                                      |
+| -------------- | --------------------------------------------------------- |
+| `useAuth`      | MSAL の初期化・ログイン・ログアウト・トークン取得         |
+| `useAgent`     | プロンプト送信・SSE 受信・メッセージ状態管理              |
 | `useAgentFlow` | 5ステップのフロー状態（idle/processing/waiting/done）管理 |
 
 ### `src/lib/`
 
 外部サービスのクライアント設定と共通ユーティリティ。
 
-| ファイル | 内容 |
-|---------|------|
-| `msal.ts` | `PublicClientApplication` のシングルトン設定 |
-| `foundry.ts` | `AIProjectClient` の初期化・エージェント呼び出し関数 |
-| `mockData.ts` | デモ用商談データ16件・フィルタ処理・ソート処理 |
-| `types.ts` | `User` / `Message` / `FlowStep` / `AgentFlow` / `Opportunity` の型定義 |
+| ファイル      | 内容                                                                   |
+| ------------- | ---------------------------------------------------------------------- |
+| `msal.ts`     | `PublicClientApplication` のシングルトン設定                           |
+| `foundry.ts`  | `AIProjectClient` の初期化・エージェント呼び出し関数                   |
+| `mockData.ts` | デモ用商談データ16件・フィルタ処理・ソート処理                         |
+| `types.ts`    | `User` / `Message` / `FlowStep` / `AgentFlow` / `Opportunity` の型定義 |
 
 ### `design_handoff/`
 

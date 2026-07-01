@@ -7,80 +7,80 @@
 
 ## 1. ドメイン用語
 
-| 用語 | 定義 | コード上の名前 |
-|------|------|--------------|
-| **ユーザー** | Entra ID でログインした社内従業員。田中（営業担当）または山田（営業マネージャー）のいずれか | `User` |
-| **エージェント** | Foundry Agent Service 上で動作し、ユーザーの質問に答える AI。MCP を通じて Salesforce にアクセスする | agent（固有名称なし） |
-| **商談** | Salesforce 上のビジネスオポチュニティ（Opportunity）。デモで表示するメインデータ | `Opportunity` |
-| **権限の一貫性** | 人間が Salesforce を操作するときと同じ権限でしか、エージェントも動けないという設計原則。セッションのコアメッセージ | — |
-| **フロー** | エージェントが応答するまでの認証・認可プロセス全体（①〜⑤の5ステップ）。Inside the Agent パネルで可視化する | `AgentFlow` |
+| 用語             | 定義                                                                                                               | コード上の名前        |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| **ユーザー**     | Entra ID でログインした社内従業員。田中（営業担当）または山田（営業マネージャー）のいずれか                        | `User`                |
+| **エージェント** | Foundry Agent Service 上で動作し、ユーザーの質問に答える AI。MCP を通じて Salesforce にアクセスする                | agent（固有名称なし） |
+| **商談**         | Salesforce 上のビジネスオポチュニティ（Opportunity）。デモで表示するメインデータ                                   | `Opportunity`         |
+| **権限の一貫性** | 人間が Salesforce を操作するときと同じ権限でしか、エージェントも動けないという設計原則。セッションのコアメッセージ | —                     |
+| **フロー**       | エージェントが応答するまでの認証・認可プロセス全体（①〜⑤の5ステップ）。Inside the Agent パネルで可視化する         | `AgentFlow`           |
 
 ---
 
 ## 2. 認証・認可用語
 
-| 用語 | 定義 | コード上の名前 |
-|------|------|--------------|
-| **Entra ID** | Microsoft のクラウド ID 管理サービス。ユーザー認証・RBAC・OBO トークン交換を担う | — |
-| **Entra Token** | Entra ID が発行するアクセストークン。Web App が Foundry Agent API を呼び出す際に使用する。色：黄（`#F59E0B`） | `accessToken`（MSAL が管理） |
-| **OBO（On-Behalf-Of）** | Web App がユーザーの Entra Token を Foundry 向けのトークンに交換するフロー（RFC 8693）。Foundry の文脈では "OAuth identity passthrough" と呼ぶ | — |
-| **OAuth identity passthrough** | Foundry がユーザーの OAuth トークンを使って MCP サーバーを呼び出す仕組み。Foundry 公式の用語。ユーザーの身元を引き継ぐ | — |
-| **CData Token** | CData Connect AI の OAuth サーバーが発行するアクセストークン。Foundry が保管し、MCP エンドポイント呼び出しに使用する。色：緑（`#16A34A`） | — |
-| **SF Token** | CData Connect AI が Salesforce OAuth で取得するトークン。そのユーザーのプロファイル権限でデータにアクセスする。色：ピンク（`#EC4899`） | — |
-| **RBAC** | ロールベースアクセス制御（Role-Based Access Control）。Foundry では `Foundry User` ロールを持つユーザーのみエージェントを使用できる | — |
-| **コンセント** | 初回のみ発生する CData OAuth の認可操作。ユーザーが「このエージェントが自分の Salesforce データにアクセスすることを許可する」と承認する | `consentGiven`（boolean） |
+| 用語                           | 定義                                                                                                                                           | コード上の名前               |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| **Entra ID**                   | Microsoft のクラウド ID 管理サービス。ユーザー認証・RBAC・OBO トークン交換を担う                                                               | —                            |
+| **Entra Token**                | Entra ID が発行するアクセストークン。Web App が Foundry Agent API を呼び出す際に使用する。色：黄（`#F59E0B`）                                  | `accessToken`（MSAL が管理） |
+| **OBO（On-Behalf-Of）**        | Web App がユーザーの Entra Token を Foundry 向けのトークンに交換するフロー（RFC 8693）。Foundry の文脈では "OAuth identity passthrough" と呼ぶ | —                            |
+| **OAuth identity passthrough** | Foundry がユーザーの OAuth トークンを使って MCP サーバーを呼び出す仕組み。Foundry 公式の用語。ユーザーの身元を引き継ぐ                         | —                            |
+| **CData Token**                | CData Connect AI の OAuth サーバーが発行するアクセストークン。Foundry が保管し、MCP エンドポイント呼び出しに使用する。色：緑（`#16A34A`）      | —                            |
+| **SF Token**                   | CData Connect AI が Salesforce OAuth で取得するトークン。そのユーザーのプロファイル権限でデータにアクセスする。色：ピンク（`#EC4899`）         | —                            |
+| **RBAC**                       | ロールベースアクセス制御（Role-Based Access Control）。Foundry では `Foundry User` ロールを持つユーザーのみエージェントを使用できる            | —                            |
+| **コンセント**                 | 初回のみ発生する CData OAuth の認可操作。ユーザーが「このエージェントが自分の Salesforce データにアクセスすることを許可する」と承認する        | `consentGiven`（boolean）    |
 
 ---
 
 ## 3. アーキテクチャ用語
 
-| 用語 | 定義 | コード上の名前 |
-|------|------|--------------|
-| **MCP（Model Context Protocol）** | AI エージェントがツール（データソース等）に接続するための標準プロトコル。CData Connect AI がリモート MCP エンドポイントを提供する | — |
-| **Foundry** | Microsoft Azure AI Foundry Agent Service の略称。エージェントの実行基盤。RBAC・Tool Approval・Observability を担う | — |
-| **CData Connect AI** | 350+ データソースへのリモート MCP エンドポイントを提供するサービス。5層アクセス制御・Per-User OAuth を備える | — |
-| **Per-User OAuth** | CData Connect AI の認証モード。ユーザーごとに個別の OAuth 認証情報を持ち、ユーザーの権限でデータソースに接続する | — |
-| **Tool Approval** | Foundry の機能。エージェントが MCP ツールを呼び出す前に承認を求めるワークフロー | — |
+| 用語                              | 定義                                                                                                                              | コード上の名前 |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| **MCP（Model Context Protocol）** | AI エージェントがツール（データソース等）に接続するための標準プロトコル。CData Connect AI がリモート MCP エンドポイントを提供する | —              |
+| **Foundry**                       | Microsoft Azure AI Foundry Agent Service の略称。エージェントの実行基盤。RBAC・Tool Approval・Observability を担う                | —              |
+| **CData Connect AI**              | 350+ データソースへのリモート MCP エンドポイントを提供するサービス。5層アクセス制御・Per-User OAuth を備える                      | —              |
+| **Per-User OAuth**                | CData Connect AI の認証モード。ユーザーごとに個別の OAuth 認証情報を持ち、ユーザーの権限でデータソースに接続する                  | —              |
+| **Tool Approval**                 | Foundry の機能。エージェントが MCP ツールを呼び出す前に承認を求めるワークフロー                                                   | —              |
 
 ---
 
 ## 4. UI 用語
 
-| 用語 | 定義 | コード上の名前 |
-|------|------|--------------|
-| **Inside the Agent** | 認証・認可フローをリアルタイムで可視化する右パネルの名称。デザイン・コード・説明で統一して使用する | `InsideAgentPanel` |
-| **フロー状態** | Inside the Agent の各ステップが取りうる状態。`idle`（未実行）/ `processing`（実行中）/ `waiting`（コンセント待ち）/ `done`（完了）/ `error`（エラー） | `FlowStatus` |
-| **プリセットボタン** | チャット下部の定型プロンプトボタン。「今月のパイプラインを見せて」など3種類 | `PresetButtons` |
-| **ソートモード** | プリセットボタンに対応したデータ表示順。`pipeline`（デフォルト）/ `amount`（金額降順）/ `close`（クローズ日昇順） | `SortMode` |
-| **ストリーミング表示** | エージェント応答をタイプライター効果で1文字ずつ表示する動作。イントロ文のみ適用し、テーブルは一括表示 | `streaming`（boolean） |
-| **モックモード** | `NEXT_PUBLIC_MOCK_MODE=true` の場合に有効になる動作モード。API を呼び出さず静的データで動作する。会場ネットワーク障害時のフォールバック | `MOCK_MODE` |
+| 用語                   | 定義                                                                                                                                                  | コード上の名前         |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| **Inside the Agent**   | 認証・認可フローをリアルタイムで可視化する右パネルの名称。デザイン・コード・説明で統一して使用する                                                    | `InsideAgentPanel`     |
+| **フロー状態**         | Inside the Agent の各ステップが取りうる状態。`idle`（未実行）/ `processing`（実行中）/ `waiting`（コンセント待ち）/ `done`（完了）/ `error`（エラー） | `FlowStatus`           |
+| **プリセットボタン**   | チャット下部の定型プロンプトボタン。「今月のパイプラインを見せて」など3種類                                                                           | `PresetButtons`        |
+| **ソートモード**       | プリセットボタンに対応したデータ表示順。`pipeline`（デフォルト）/ `amount`（金額降順）/ `close`（クローズ日昇順）                                     | `SortMode`             |
+| **ストリーミング表示** | エージェント応答をタイプライター効果で1文字ずつ表示する動作。イントロ文のみ適用し、テーブルは一括表示                                                 | `streaming`（boolean） |
+| **モックモード**       | `NEXT_PUBLIC_MOCK_MODE=true` の場合に有効になる動作モード。API を呼び出さず静的データで動作する。会場ネットワーク障害時のフォールバック               | `MOCK_MODE`            |
 
 ---
 
 ## 5. デモ用語（登壇時の説明で使う言葉）
 
-| 用語 | 定義と使用場面 |
-|------|--------------|
-| **田中（営業担当）** | デモで使用するユーザーA。Salesforce プロファイルは Sales Rep。自分の担当商談のみ見える（8件） |
-| **山田（営業マネージャー）** | デモで使用するユーザーB。Salesforce プロファイルは Sales Manager。チーム全体の商談が見える（16件） |
-| **ユーザー切替** | ヘッダードロップダウンで田中↔山田を切り替えるデモ操作。チャット履歴は保持される |
-| **デモの山場** | ④ CData OAuth コンセントフローが `⏳` で止まる瞬間。ユーザーが承認を求められる場面。「初回だけユーザーが承認する」という体験を見せるポイント |
+| 用語                         | 定義と使用場面                                                                                                                               |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| **田中（営業担当）**         | デモで使用するユーザーA。Salesforce プロファイルは Sales Rep。自分の担当商談のみ見える（8件）                                                |
+| **山田（営業マネージャー）** | デモで使用するユーザーB。Salesforce プロファイルは Sales Manager。チーム全体の商談が見える（16件）                                           |
+| **ユーザー切替**             | ヘッダードロップダウンで田中↔山田を切り替えるデモ操作。チャット履歴は保持される                                                              |
+| **デモの山場**               | ④ CData OAuth コンセントフローが `⏳` で止まる瞬間。ユーザーが承認を求められる場面。「初回だけユーザーが承認する」という体験を見せるポイント |
 
 ---
 
 ## 6. 英語・日本語対応表
 
-| 英語 | 日本語 | コード上の名前 |
-|------|--------|--------------|
-| Agent | エージェント | agent |
-| Opportunity | 商談 | `Opportunity` |
-| Flow | フロー | `AgentFlow` |
-| Step | ステップ | `FlowStep` |
-| Consent | コンセント / 承認 | `consentGiven` |
-| Passthrough | パススルー / 引き継ぎ | — |
-| Streaming | ストリーミング / タイプライター表示 | `streaming` |
-| Sort mode | ソートモード | `SortMode` |
-| Mock mode | モックモード | `MOCK_MODE` |
-| Inside the Agent | Inside the Agent（訳さない） | `InsideAgentPanel` |
-| Token | トークン（訳さない） | `accessToken` 等 |
-| Lifeline | ライフライン（訳さない） | `Lifeline` |
+| 英語             | 日本語                              | コード上の名前     |
+| ---------------- | ----------------------------------- | ------------------ |
+| Agent            | エージェント                        | agent              |
+| Opportunity      | 商談                                | `Opportunity`      |
+| Flow             | フロー                              | `AgentFlow`        |
+| Step             | ステップ                            | `FlowStep`         |
+| Consent          | コンセント / 承認                   | `consentGiven`     |
+| Passthrough      | パススルー / 引き継ぎ               | —                  |
+| Streaming        | ストリーミング / タイプライター表示 | `streaming`        |
+| Sort mode        | ソートモード                        | `SortMode`         |
+| Mock mode        | モックモード                        | `MOCK_MODE`        |
+| Inside the Agent | Inside the Agent（訳さない）        | `InsideAgentPanel` |
+| Token            | トークン（訳さない）                | `accessToken` 等   |
+| Lifeline         | ライフライン（訳さない）            | `Lifeline`         |

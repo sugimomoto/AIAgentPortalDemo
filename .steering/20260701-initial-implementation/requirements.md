@@ -20,18 +20,18 @@ AI Dev Day 2026（2026年7月24日）セッションのライブデモ用アプ�
 
 ### 今回やること（In Scope）
 
-| # | 項目 |
-|---|------|
-| 1 | Next.js（App Router）+ TypeScript + Tailwind のプロジェクト初期化 |
-| 2 | ログイン画面（Microsoft ログイン風・確定デザイン再現） |
-| 3 | ポータル画面 2カラムレイアウト（ヘッダー / チャット / Inside the Agent） |
-| 4 | ヘッダー（ユーザー切替ドロップダウン・ログアウト） |
-| 5 | チャット UI（メッセージ履歴・プリセット3種・入力欄・思考ドット・タイプライター） |
-| 6 | Inside the Agent シーケンス図（参加者6者・ライフライン・5セクション・矢印・トークン注記・凡例） |
-| 7 | フロー進行ロジック（`send` / `approveConsent` / `finish`・`runId`・`stepDelay`・④待機停止） |
-| 8 | Markdown レンダリング（react-markdown + remark-gfm、ステージバッジ用インライン HTML 許可） |
-| 9 | モックデータ（商談16件）・フィルタ（田中8件 / 山田16件）・ソート（pipeline/amount/close） |
-| 10 | モックモード（`NEXT_PUBLIC_MOCK_MODE`）と `stepDelay` の環境変数化 |
+| #   | 項目                                                                                            |
+| --- | ----------------------------------------------------------------------------------------------- |
+| 1   | Next.js（App Router）+ TypeScript + Tailwind のプロジェクト初期化                               |
+| 2   | ログイン画面（Microsoft ログイン風・確定デザイン再現）                                          |
+| 3   | ポータル画面 2カラムレイアウト（ヘッダー / チャット / Inside the Agent）                        |
+| 4   | ヘッダー（ユーザー切替ドロップダウン・ログアウト）                                              |
+| 5   | チャット UI（メッセージ履歴・プリセット3種・入力欄・思考ドット・タイプライター）                |
+| 6   | Inside the Agent シーケンス図（参加者6者・ライフライン・5セクション・矢印・トークン注記・凡例） |
+| 7   | フロー進行ロジック（`send` / `approveConsent` / `finish`・`runId`・`stepDelay`・④待機停止）     |
+| 8   | Markdown レンダリング（react-markdown + remark-gfm、ステージバッジ用インライン HTML 許可）      |
+| 9   | モックデータ（商談16件）・フィルタ（田中8件 / 山田16件）・ソート（pipeline/amount/close）       |
+| 10  | モックモード（`NEXT_PUBLIC_MOCK_MODE`）と `stepDelay` の環境変数化                              |
 
 ### 今回やらないこと（Out of Scope・後続タスク）
 
@@ -69,12 +69,12 @@ AI Dev Day 2026（2026年7月24日）セッションのライブデモ用アプ�
 
 ## 5. 制約事項
 
-| 制約 | 内容 |
-|------|------|
-| 解像度 | 1920×1080 固定。レスポンシブ不要 |
-| ブラウザ | Chrome 最新版で動作保証 |
-| フォント | Noto Sans JP（Google Fonts, 400/500/600/700） |
+| 制約           | 内容                                                                          |
+| -------------- | ----------------------------------------------------------------------------- |
+| 解像度         | 1920×1080 固定。レスポンシブ不要                                              |
+| ブラウザ       | Chrome 最新版で動作保証                                                       |
+| フォント       | Noto Sans JP（Google Fonts, 400/500/600/700）                                 |
 | デザイン忠実度 | High-fidelity。配色・余白・タイポ・アニメーションまで `design_handoff` に忠実 |
-| セキュリティ | クライアントシークレットはサーバー側のみ。トークンは localStorage 不使用 |
-| 状態の初期値 | screen=login / user=tanaka / requireConsent=true / stepDelay=9500ms |
-| スケジュール | 7/22 リハーサル・7/24 本番に間に合わせる |
+| セキュリティ   | クライアントシークレットはサーバー側のみ。トークンは localStorage 不使用      |
+| 状態の初期値   | screen=login / user=tanaka / requireConsent=true / stepDelay=9500ms           |
+| スケジュール   | 7/22 リハーサル・7/24 本番に間に合わせる                                      |

@@ -67,31 +67,31 @@ graph TB
 
 ### 2-2. ヘッダー
 
-| 要素 | 内容 |
-|------|------|
-| ロゴ | 「AI Agent Portal」テキスト + アイコン |
-| ユーザー情報 | ログイン中のユーザー名・役職を表示 |
+| 要素               | 内容                                             |
+| ------------------ | ------------------------------------------------ |
+| ロゴ               | 「AI Agent Portal」テキスト + アイコン           |
+| ユーザー情報       | ログイン中のユーザー名・役職を表示               |
 | ユーザー切替ボタン | デモ用アカウントを素早く切り替えるドロップダウン |
-| ログアウトボタン | Entra ID セッションを破棄してログイン画面へ |
+| ログアウトボタン   | Entra ID セッションを破棄してログイン画面へ      |
 
 ### 2-3. チャットパネル（左）
 
-| 要素 | 内容 |
-|------|------|
-| メッセージ履歴 | ユーザー発言・エージェント応答を時系列で表示 |
-| ストリーミング表示 | イントロ文（件数・合計金額）をタイプライター表示 → 商談テーブルを一括表示 |
-| Salesforceデータ表示 | チャット応答内のMarkdownテーブルとして表示（独立パネルなし） |
-| プリセットボタン | 3種を横並びで用意。ソートモードと連動 |
-| 入力欄 | テキスト入力 + 送信ボタン |
-| ローディング表示 | 思考中は3ドットアニメーション、ストリーミング中は末尾キャレット点滅 |
+| 要素                 | 内容                                                                      |
+| -------------------- | ------------------------------------------------------------------------- |
+| メッセージ履歴       | ユーザー発言・エージェント応答を時系列で表示                              |
+| ストリーミング表示   | イントロ文（件数・合計金額）をタイプライター表示 → 商談テーブルを一括表示 |
+| Salesforceデータ表示 | チャット応答内のMarkdownテーブルとして表示（独立パネルなし）              |
+| プリセットボタン     | 3種を横並びで用意。ソートモードと連動                                     |
+| 入力欄               | テキスト入力 + 送信ボタン                                                 |
+| ローディング表示     | 思考中は3ドットアニメーション、ストリーミング中は末尾キャレット点滅       |
 
 **プリセットプロンプトとソートモード**
 
-| ボタン | ソートモード |
-|--------|------------|
+| ボタン                         | ソートモード               |
+| ------------------------------ | -------------------------- |
 | 「今月のパイプラインを見せて」 | `pipeline`（デフォルト順） |
-| 「金額が大きい順に並べて」 | `amount`（金額降順） |
-| 「クローズが近い商談を教えて」 | `close`（クローズ日昇順） |
+| 「金額が大きい順に並べて」     | `amount`（金額降順）       |
+| 「クローズが近い商談を教えて」 | `close`（クローズ日昇順）  |
 
 ### 2-4. Inside the Agent パネル（右）
 
@@ -200,12 +200,12 @@ src/
 
 ```typescript
 type User = {
-  id: string              // Entra Object ID
-  name: string            // 表示名（例：田中 一郎）
-  email: string           // メールアドレス
-  jobTitle: string        // 役職（例：営業担当）
-  sfProfile: string       // Salesforce プロファイル名（例：Sales Rep）
-  accessToken: string     // Foundry 用 Access Token（OBO 済み）
+  id: string // Entra Object ID
+  name: string // 表示名（例：田中 一郎）
+  email: string // メールアドレス
+  jobTitle: string // 役職（例：営業担当）
+  sfProfile: string // Salesforce プロファイル名（例：Sales Rep）
+  accessToken: string // Foundry 用 Access Token（OBO 済み）
 }
 ```
 
@@ -217,7 +217,7 @@ type Message = {
   role: 'user' | 'agent'
   content: string
   timestamp: Date
-  agentFlow?: AgentFlow    // エージェント応答時のフロー情報
+  agentFlow?: AgentFlow // エージェント応答時のフロー情報
 }
 ```
 
@@ -227,19 +227,19 @@ type Message = {
 type FlowStatus = 'idle' | 'processing' | 'waiting' | 'done' | 'error'
 
 type FlowStep = {
-  step: 0 | 1 | 2 | 3 | 4     // 配列 index（0〜4）。UI 上の表示ラベルは ①〜⑤
+  step: 0 | 1 | 2 | 3 | 4 // 配列 index（0〜4）。UI 上の表示ラベルは ①〜⑤
   label: string
-  status: FlowStatus          // idle=未実行 / processing=実行中 / waiting=コンセント待ち / done=完了 / error
-  detail?: string             // 補足情報（フィルタ条件・レスポンスタイム等）
+  status: FlowStatus // idle=未実行 / processing=実行中 / waiting=コンセント待ち / done=完了 / error
+  detail?: string // 補足情報（フィルタ条件・レスポンスタイム等）
   tokenType?: 'entra' | 'cdata' | 'salesforce'
 }
 
 type AgentFlow = {
   steps: FlowStep[]
-  consentLink?: string      // ④ 初回コンセント時のみ
-  mcpTool?: string          // 呼び出したMCPツール名
-  sfFilter?: string         // Salesforceクエリフィルタ（例：owner='田中 一郎'）
-  responseMs?: number       // レスポンスタイム（ms）
+  consentLink?: string // ④ 初回コンセント時のみ
+  mcpTool?: string // 呼び出したMCPツール名
+  sfFilter?: string // Salesforceクエリフィルタ（例：owner='田中 一郎'）
+  responseMs?: number // レスポンスタイム（ms）
 }
 ```
 
@@ -248,12 +248,12 @@ type AgentFlow = {
 ```typescript
 type Opportunity = {
   id: string
-  name: string             // 商談名
-  stage: string            // ステージ（例：Prospecting / Closed Won）
-  amount: number           // 金額（円）
-  ownerName: string        // 担当者名
-  closeDate: string        // クローズ予定日（YYYY-MM-DD）
-  updatedAt: string        // 更新日時
+  name: string // 商談名
+  stage: string // ステージ（例：Prospecting / Closed Won）
+  amount: number // 金額（円）
+  ownerName: string // 担当者名
+  closeDate: string // クローズ予定日（YYYY-MM-DD）
+  updatedAt: string // 更新日時
 }
 ```
 
@@ -269,9 +269,9 @@ Foundry Agent Service を呼び出し、エージェントの応答とフロー�
 
 ```typescript
 {
-  prompt: string          // ユーザーのプロンプト
-  userId: string          // ユーザーID（フロー追跡用）
-  sortMode: 'pipeline' | 'amount' | 'close'  // 表示ソート（プリセット連動）
+  prompt: string // ユーザーのプロンプト
+  userId: string // ユーザーID（フロー追跡用）
+  sortMode: 'pipeline' | 'amount' | 'close' // 表示ソート（プリセット連動）
 }
 ```
 
@@ -281,16 +281,31 @@ Foundry Agent Service を呼び出し、エージェントの応答とフロー�
 
 ```typescript
 // フロー状態更新（ステップ 0〜4）
-{ type: 'flow_update'; step: 0|1|2|3|4; status: 'processing'|'waiting'|'done'|'error' }
+{
+  type: 'flow_update'
+  step: 0 | 1 | 2 | 3 | 4
+  status: 'processing' | 'waiting' | 'done' | 'error'
+}
 
 // 初回コンセント要求（初回のみ）
-{ type: 'consent_required'; consentLink: string }
+{
+  type: 'consent_required'
+  consentLink: string
+}
 
 // テキストチャンク（タイプライター表示用。商談テーブルも Markdown で含む）
-{ type: 'text'; content: string }
+{
+  type: 'text'
+  content: string
+}
 
 // 完了（フロー全体のサマリー）
-{ type: 'done'; mcpTool: string; sfFilter: string; responseMs: number }
+{
+  type: 'done'
+  mcpTool: string
+  sfFilter: string
+  responseMs: number
+}
 ```
 
 ### POST `/api/auth/token`
@@ -301,7 +316,7 @@ Entra ID の OBO フローで Foundry 用 Access Token を取得する。
 
 ```typescript
 {
-  assertion: string       // ユーザーの Access Token（OBO の assertion）
+  assertion: string // ユーザーの Access Token（OBO の assertion）
 }
 ```
 
@@ -309,8 +324,8 @@ Entra ID の OBO フローで Foundry 用 Access Token を取得する。
 
 ```typescript
 {
-  accessToken: string     // Foundry 用 Access Token
-  expiresIn: number       // 有効期限（秒）
+  accessToken: string // Foundry 用 Access Token
+  expiresIn: number // 有効期限（秒）
 }
 ```
 
@@ -320,29 +335,29 @@ Entra ID の OBO フローで Foundry 用 Access Token を取得する。
 
 ### シナリオ A：田中 一郎（営業担当）
 
-| 項目 | 内容 |
-|------|------|
+| 項目                    | 内容                              |
+| ----------------------- | --------------------------------- |
 | Salesforce プロファイル | Sales Rep（自分の案件のみ閲覧可） |
-| 期待される動作 | 自分が担当する商談のみ返る |
-| フィルタ条件 | `owner = '田中 一郎'` |
-| 件数イメージ | 8件（合計 ¥79,000,000） |
+| 期待される動作          | 自分が担当する商談のみ返る        |
+| フィルタ条件            | `owner = '田中 一郎'`             |
+| 件数イメージ            | 8件（合計 ¥79,000,000）           |
 
 ### シナリオ B：山田 花子（営業マネージャー）
 
-| 項目 | 内容 |
-|------|------|
+| 項目                    | 内容                              |
+| ----------------------- | --------------------------------- |
 | Salesforce プロファイル | Sales Manager（チーム全体閲覧可） |
-| 期待される動作 | チーム全員の商談が返る |
-| フィルタ条件 | なし（全件・マネージャー権限） |
-| 件数イメージ | 16件（全担当分） |
+| 期待される動作          | チーム全員の商談が返る            |
+| フィルタ条件            | なし（全件・マネージャー権限）    |
+| 件数イメージ            | 16件（全担当分）                  |
 
 ### デモの流れ（12分）
 
-| 時間 | 操作 | 見せるポイント |
-|------|------|--------------|
-| 0:00〜1:00 | 田中でログイン | Entra ID 認証・ユーザー情報表示 |
-| 1:00〜3:00 | 初回コンセント | ④ CData OAuth コンセントフローをパネルで可視化 |
-| 3:00〜6:00 | 「今月のパイプラインを見せて」 | ①〜⑤のフロー全体・田中の商談のみ表示 |
-| 6:00〜7:00 | 山田に切替 | チャット履歴は保持・ユーザー変更（同じ質問の対比のため） |
-| 7:00〜10:00 | 同じプロンプトを再実行 | 同じ質問でも返るデータが違う（チーム全体） |
-| 10:00〜12:00 | パネルの解説 | フィルタ条件の違い・「エージェントは権限を超えられない」まとめ |
+| 時間         | 操作                           | 見せるポイント                                                 |
+| ------------ | ------------------------------ | -------------------------------------------------------------- |
+| 0:00〜1:00   | 田中でログイン                 | Entra ID 認証・ユーザー情報表示                                |
+| 1:00〜3:00   | 初回コンセント                 | ④ CData OAuth コンセントフローをパネルで可視化                 |
+| 3:00〜6:00   | 「今月のパイプラインを見せて」 | ①〜⑤のフロー全体・田中の商談のみ表示                           |
+| 6:00〜7:00   | 山田に切替                     | チャット履歴は保持・ユーザー変更（同じ質問の対比のため）       |
+| 7:00〜10:00  | 同じプロンプトを再実行         | 同じ質問でも返るデータが違う（チーム全体）                     |
+| 10:00〜12:00 | パネルの解説                   | フィルタ条件の違い・「エージェントは権限を超えられない」まとめ |

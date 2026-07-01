@@ -13,10 +13,15 @@
 
 - [x] T0-0　`.devcontainer/devcontainer.json` 作成（Node 20 / port 3000 / 拡張機能 / postCreate で playwright install）
 - [x] T0-1　（コンテナ内）Next.js（App Router）+ TypeScript + Tailwind でプロジェクト初期化 → Rebuild で依存導入
-      - Next 15.5.19 / React 19.1.0 / TypeScript strict / `src/` / import alias `@/*`
-      - Tailwind は仕様（architecture.md §1）どおり **v3.4** を手動導入（`tailwind.config.ts` + `postcss.config.mjs`）
-      - `npm run build` green（型チェック・lint 通過）
-- [ ] T0-2　ESLint / Prettier / tsconfig strict 設定
+  - Next 15.5.19 / React 19.1.0 / TypeScript strict / `src/` / import alias `@/*`
+  - Tailwind は仕様（architecture.md §1）どおり **v3.4** を手動導入（`tailwind.config.ts` + `postcss.config.mjs`）
+  - `npm run build` green（型チェック・lint 通過）
+- [x] T0-2　ESLint / Prettier / tsconfig strict 設定
+  - Prettier 3.9（`.prettierrc.json`：semi=false / singleQuote / printWidth=100 / tailwind plugin）＋ `.prettierignore`
+  - ESLint に `eslint-config-prettier/flat` と `@typescript-eslint/no-explicit-any: error` を追加
+  - scripts 追加：`lint` / `lint:fix` / `typecheck` / `format` / `format:check`
+  - tsconfig は scaffold の `strict: true` を採用（既定）
+  - 全ファイル整形済み・`lint` / `typecheck` / `format:check` すべて green
 - [ ] T0-3　テスト基盤導入：**Vitest + React Testing Library + jsdom**（`npm run test`）
 - [ ] T0-4　**Playwright** 導入（E2E・`npm run test:e2e`）
 - [ ] T0-5　Noto Sans JP 読み込み・`globals.css`（`.md-body`・`@keyframes`）・`.env.local.example`

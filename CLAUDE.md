@@ -1,6 +1,7 @@
 # CLAUDE.md (プロジェクトメモリ)
 
 ## 概要
+
 開発を進めるうえで遵守すべき標準ルールを定義します。
 
 ## プロジェクト構造
@@ -56,7 +57,6 @@
   - 英語・日本語対応表
   - コード上の命名規則
 
-
 #### 2. 作業単位のドキュメント（`.steering/[YYYYMMDD]-[開発タイトル]/`）
 
 特定の開発作業における「**今回何をするか**」を定義する一時的なステアリングファイル。
@@ -86,6 +86,7 @@
 ```
 
 **例：**
+
 - `.steering/20250103-initial-implementation/`
 - `.steering/20250115-add-tag-feature/`
 - `.steering/20250120-fix-filter-bug/`
@@ -96,6 +97,7 @@
 ### 初回セットアップ時の手順
 
 #### 1. フォルダ作成
+
 ```bash
 mkdir -p docs
 mkdir -p .steering
@@ -124,6 +126,7 @@ mkdir -p .steering/[YYYYMMDD]-initial-implementation
 ```
 
 作成するドキュメント：
+
 1. `.steering/[YYYYMMDD]-initial-implementation/requirements.md` - 初回実装の要求
 2. `.steering/[YYYYMMDD]-initial-implementation/design.md` - 実装設計
 3. `.steering/[YYYYMMDD]-initial-implementation/tasklist.md` - 実装タスク
@@ -152,6 +155,7 @@ mkdir -p .steering/[YYYYMMDD]-[開発タイトル]
 ```
 
 **例：**
+
 ```bash
 mkdir -p .steering/20250115-add-tag-feature
 ```
@@ -180,12 +184,14 @@ mkdir -p .steering/20250115-add-tag-feature
 ## ドキュメント管理の原則
 
 ### 永続的ドキュメント（`docs/`）
+
 - アプリケーションの基本設計を記述
 - 頻繁に更新されない
 - 大きな設計変更時のみ更新
 - プロジェクト全体の「北極星」として機能
 
 ### 作業単位のドキュメント（`.steering/`）
+
 - 特定の作業・変更に特化
 - 作業ごとに新しいディレクトリを作成
 - 作業完了後は履歴として保持
@@ -194,16 +200,19 @@ mkdir -p .steering/20250115-add-tag-feature
 ## 図表・ダイアグラムの記載ルール
 
 ### 記載場所
+
 設計図やダイアグラムは、関連する永続的ドキュメント内に直接記載します。
 独立したdiagramsフォルダは作成せず、手間を最小限に抑えます。
 
 **配置例：**
+
 - ER図、データモデル図 → `functional-design.md` 内に記載
 - ユースケース図 → `functional-design.md` または `product-requirements.md` 内に記載
 - 画面遷移図、ワイヤフレーム → `functional-design.md` 内に記載
 - システム構成図 → `functional-design.md` または `architecture.md` 内に記載
 
 ### 記述形式
+
 1. **Mermaid記法（推奨）**
    - Markdownに直接埋め込める
    - バージョン管理が容易
@@ -238,6 +247,7 @@ graph TD
    - PNG または SVG 形式を推奨
 
 ### 図表の更新
+
 - 設計変更時は対応する図表も同時に更新
 - 図表とコードの乖離を防ぐ
 

@@ -42,9 +42,12 @@ type ChatPanelProps = {
 }
 
 // ✅ useCallback でメモ化（再レンダリングの多いコンポーネント）
-const handleSend = useCallback((text: string) => {
-  // ...
-}, [deps])
+const handleSend = useCallback(
+  (text: string) => {
+    // ...
+  },
+  [deps],
+)
 
 // ✅ Server Component はデフォルト。必要な箇所のみ 'use client'
 // app/portal/page.tsx → Server Component
@@ -55,16 +58,16 @@ const handleSend = useCallback((text: string) => {
 
 ## 2. 命名規則
 
-| 対象 | 規則 | 例 |
-|------|------|-----|
-| コンポーネント | PascalCase | `InsideAgentPanel.tsx` |
-| フック | camelCase・`use` プレフィックス | `useAgentFlow.ts` |
-| 関数・変数 | camelCase | `approveConsent()`, `flowSteps` |
-| 定数 | UPPER_SNAKE_CASE | `STEP_DELAY_MS`, `MAX_RETRIES` |
-| 型・インターフェース | PascalCase | `FlowStep`, `AgentEvent` |
-| CSS クラス（Tailwind 以外） | kebab-case | `.md-body`, `.blink-caret` |
-| 環境変数 | UPPER_SNAKE_CASE | `AZURE_CLIENT_SECRET` |
-| API Route | Next.js 規約に従う | `app/api/agent/route.ts` |
+| 対象                        | 規則                            | 例                              |
+| --------------------------- | ------------------------------- | ------------------------------- |
+| コンポーネント              | PascalCase                      | `InsideAgentPanel.tsx`          |
+| フック                      | camelCase・`use` プレフィックス | `useAgentFlow.ts`               |
+| 関数・変数                  | camelCase                       | `approveConsent()`, `flowSteps` |
+| 定数                        | UPPER_SNAKE_CASE                | `STEP_DELAY_MS`, `MAX_RETRIES`  |
+| 型・インターフェース        | PascalCase                      | `FlowStep`, `AgentEvent`        |
+| CSS クラス（Tailwind 以外） | kebab-case                      | `.md-body`, `.blink-caret`      |
+| 環境変数                    | UPPER_SNAKE_CASE                | `AZURE_CLIENT_SECRET`           |
+| API Route                   | Next.js 規約に従う              | `app/api/agent/route.ts`        |
 
 ---
 
@@ -112,12 +115,12 @@ export const LAYOUT = {
 
 ### 状態の配置
 
-| 状態の種類 | 配置場所 |
-|-----------|---------|
-| グローバル（認証・ユーザー選択） | `app/portal/page.tsx` から props で渡す |
-| フロー状態（5ステップ） | `useAgentFlow` フック |
-| チャットメッセージ | `useAgent` フック |
-| UI ローカル状態（メニュー開閉など） | 各コンポーネント内 `useState` |
+| 状態の種類                          | 配置場所                                |
+| ----------------------------------- | --------------------------------------- |
+| グローバル（認証・ユーザー選択）    | `app/portal/page.tsx` から props で渡す |
+| フロー状態（5ステップ）             | `useAgentFlow` フック                   |
+| チャットメッセージ                  | `useAgent` フック                       |
+| UI ローカル状態（メニュー開閉など） | 各コンポーネント内 `useState`           |
 
 ### 非同期処理のキャンセル
 
@@ -129,7 +132,7 @@ const runIdRef = useRef(0)
 const send = useCallback(async (text: string) => {
   const id = ++runIdRef.current
   // 各非同期ステップで id チェック
-  if (runIdRef.current !== id) return  // 古い実行はスキップ
+  if (runIdRef.current !== id) return // 古い実行はスキップ
 }, [])
 ```
 
@@ -142,12 +145,12 @@ const send = useCallback(async (text: string) => {
 
 ### テストレイヤと使用ツール
 
-| レイヤ | ツール | 対象 |
-|--------|--------|------|
-| 単体（純粋関数） | Vitest | フィルタ・ソート・回答生成などのロジック |
-| 状態機械 | Vitest（fake timers） | フロー進行（`send`/`approveConsent`/`finish`）・④待機・`runId` キャンセル |
-| コンポーネント | Vitest + React Testing Library | busy 中の disabled・ドロップダウン開閉・空状態など**挙動** |
-| E2E（受け入れ） | Playwright | 受け入れ条件シナリオ（田中8件→山田16件・④コンセント停止・履歴保持） |
+| レイヤ           | ツール                         | 対象                                                                      |
+| ---------------- | ------------------------------ | ------------------------------------------------------------------------- |
+| 単体（純粋関数） | Vitest                         | フィルタ・ソート・回答生成などのロジック                                  |
+| 状態機械         | Vitest（fake timers）          | フロー進行（`send`/`approveConsent`/`finish`）・④待機・`runId` キャンセル |
+| コンポーネント   | Vitest + React Testing Library | busy 中の disabled・ドロップダウン開閉・空状態など**挙動**                |
+| E2E（受け入れ）  | Playwright                     | 受け入れ条件シナリオ（田中8件→山田16件・④コンセント停止・履歴保持）       |
 
 - タイミング依存のロジックは **fake timers** で制御し、`stepDelay` を小さくして高速に検証する。
 - **デザインのピクセル忠実性は自動テスト対象外**とし、`design_handoff` との目視＋ Playwright スクリーンショットで確認する（下記チェックリスト）。
