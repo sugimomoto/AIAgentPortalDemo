@@ -27,7 +27,11 @@
   - `vitest.setup.ts`（jest-dom マッチャ登録＋afterEach cleanup）・`vitest-env.d.ts`（globals 型参照）
   - scripts 追加：`test`（run）/ `test:watch`
   - スモークテスト（純粋関数＋RTL レンダリング）で green を確認後に削除
-- [ ] T0-4　**Playwright** 導入（E2E・`npm run test:e2e`）
+- [x] T0-4　**Playwright** 導入（E2E・`npm run test:e2e`）
+  - `@playwright/test` 1.61＋chromium（headless shell）導入
+  - `playwright.config.ts`（testDir=`e2e` / baseURL / 1920×1080 / webServer=`npm run dev` を `MOCK_MODE=true`・`STEP_DELAY_MS=80` で起動）
+  - `e2e/smoke.spec.ts` で疎通 green・script `test:e2e` 追加
+  - `next.config.ts` に `allowedDevOrigins` 追加・`.gitignore`/`.prettierignore` に test 成果物を追加
 - [ ] T0-5　Noto Sans JP 読み込み・`globals.css`（`.md-body`・`@keyframes`）・`.env.local.example`
 - [ ] T0-6　`lib/tokens.ts`（色・寸法定数）・`lib/types.ts`（型定義）
 
