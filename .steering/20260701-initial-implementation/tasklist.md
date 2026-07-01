@@ -44,13 +44,13 @@
 
 ## フェーズ 1：ドメインロジック（純粋関数・TDD）
 
-- [ ] T1-1 🔴　`mockData` テスト：16件定義、`filterByUser`（田中8件 / 山田16件）、田中合計 ¥79,000,000
-- [ ] T1-2 🟢　`lib/mockData.ts` 実装（データ＋`filterByUser`）
-- [ ] T1-3 🔴　`sortOpportunities` テスト：pipeline=定義順 / amount=降順 / close=昇順
-- [ ] T1-4 🟢　`sortOpportunities` 実装
-- [ ] T1-5 🔴　`buildAgentAnswer` テスト：イントロの件数・合計、フィルタ表記、テーブル行数（田中8/山田16）、ステージバッジ HTML
-- [ ] T1-6 🟢　`buildAgentAnswer` 実装
-- [ ] T1-7 🔴🟢　`lib/sequence.ts`：参加者6者・①〜⑤メッセージ定義＋⑤フィルタ注記のユーザー差し替えテスト
+- [x] T1-1 🔴　`mockData` テスト：16件定義、`filterByUser`（田中8件 / 山田16件）、田中合計 ¥79,000,000
+- [x] T1-2 🟢　`lib/mockData.ts` 実装（データ＋`filterByUser`）
+- [x] T1-3 🔴　`sortOpportunities` テスト：pipeline=定義順 / amount=降順 / close=昇順
+- [x] T1-4 🟢　`sortOpportunities` 実装
+- [x] T1-5 🔴　`buildAgentAnswer` テスト：イントロの件数・合計、フィルタ表記、テーブル行数（田中8/山田16）、ステージバッジ HTML
+- [x] T1-6 🟢　`buildAgentAnswer` 実装
+- [x] T1-7 🔴🟢　`lib/sequence.ts`：参加者6者・①〜⑤メッセージ定義＋⑤フィルタ注記のユーザー差し替えテスト
 
 ---
 
