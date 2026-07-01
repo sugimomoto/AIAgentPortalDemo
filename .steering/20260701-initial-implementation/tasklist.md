@@ -70,14 +70,14 @@
 
 ## フェーズ 3：UI コンポーネント（挙動を RTL でテスト → 実装）
 
-- [ ] T3-1 🔴🟢　ログイン画面：Microsoft ボタン押下で `portal` 遷移
-- [ ] T3-2 🔴🟢　`Header`：ユーザー切替ドロップダウン開閉・選択で `user` 変更・ログアウト
-- [ ] T3-3 🔴🟢　`ChatInput`/`PresetButtons`：busy 中 disabled・プリセットが `sortMode` 連動送信
-- [ ] T3-4 🔴🟢　`MessageBubble`：Markdown レンダリング（react-markdown + remark-gfm）＋ステージバッジ span 許可・streaming キャレット
-- [ ] T3-5 🔴🟢　`MessageList`：空状態プレースホルダ・新着自動スクロール・思考ドット
-- [ ] T3-6 🟢　`InsideAgentPanel` 群：`ParticipantHeader`/`Lifeline`/`SequenceSection`/`SequenceMessage`/`TokenBadge`/`ConsentButton`/`TokenLegend` を sequence 定義から描画
-- [ ] T3-7 🔴🟢　`ConsentButton`：`awaitingConsent` 時のみ表示・押下で `approveConsent`
-- [ ] T3-8 🟢　`app/portal/page.tsx` で全ブロック結線・ルート state 保持
+- [x] T3-1 🔴🟢　ログイン画面：Microsoft ボタン押下で `portal` 遷移
+- [x] T3-2 🔴🟢　`Header`：ユーザー切替ドロップダウン開閉・選択で `user` 変更・ログアウト
+- [x] T3-3 🔴🟢　`ChatInput`/`PresetButtons`：busy 中 disabled・プリセットが `sortMode` 連動送信
+- [x] T3-4 🔴🟢　`MessageBubble`：Markdown レンダリング（react-markdown + remark-gfm）＋ステージバッジ span 許可・streaming キャレット
+- [x] T3-5 🔴🟢　`MessageList`：空状態プレースホルダ・新着自動スクロール・思考ドット
+- [x] T3-6 🟢　`InsideAgentPanel` 群：`ParticipantHeader`/`Lifeline`/`SequenceSection`/`SequenceMessage`/`TokenBadge`/`ConsentButton`/`TokenLegend` を sequence 定義から描画
+- [x] T3-7 🔴🟢　`ConsentButton`：`awaitingConsent` 時のみ表示・押下で `approveConsent`
+- [x] T3-8 🟢　`app/portal/page.tsx` で全ブロック結線・ルート state 保持
 
 ---
 
