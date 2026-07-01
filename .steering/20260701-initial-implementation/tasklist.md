@@ -22,7 +22,11 @@
   - scripts 追加：`lint` / `lint:fix` / `typecheck` / `format` / `format:check`
   - tsconfig は scaffold の `strict: true` を採用（既定）
   - 全ファイル整形済み・`lint` / `typecheck` / `format:check` すべて green
-- [ ] T0-3　テスト基盤導入：**Vitest + React Testing Library + jsdom**（`npm run test`）
+- [x] T0-3　テスト基盤導入：**Vitest + React Testing Library + jsdom**（`npm run test`）
+  - Vitest 4.1（`vitest.config.ts`：jsdom / globals / `@vitejs/plugin-react` / `@` alias / include=`src/**/*.{test,spec}.{ts,tsx}` / exclude=`e2e`）
+  - `vitest.setup.ts`（jest-dom マッチャ登録＋afterEach cleanup）・`vitest-env.d.ts`（globals 型参照）
+  - scripts 追加：`test`（run）/ `test:watch`
+  - スモークテスト（純粋関数＋RTL レンダリング）で green を確認後に削除
 - [ ] T0-4　**Playwright** 導入（E2E・`npm run test:e2e`）
 - [ ] T0-5　Noto Sans JP 読み込み・`globals.css`（`.md-body`・`@keyframes`）・`.env.local.example`
 - [ ] T0-6　`lib/tokens.ts`（色・寸法定数）・`lib/types.ts`（型定義）
