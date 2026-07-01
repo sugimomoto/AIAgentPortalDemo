@@ -34,8 +34,10 @@ export function SequenceMessage({ message, status, accent, consentVisible, onApp
             left: `${x}%`,
             width: 26,
             height: 24,
-            border: `2px solid ${color}`,
-            borderLeft: 'none',
+            // shorthand(border) と longhand(borderLeft) の混在を避けるため辺ごとに指定
+            borderTop: `2px solid ${color}`,
+            borderRight: `2px solid ${color}`,
+            borderBottom: `2px solid ${color}`,
             borderRadius: '0 8px 8px 0',
             animation: active ? 'seqPulse 1.1s ease-in-out infinite' : undefined,
           }}
