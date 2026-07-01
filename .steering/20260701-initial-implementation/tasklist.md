@@ -83,10 +83,10 @@
 
 ## フェーズ 4：デザイン忠実化（目視 + スクリーンショット）
 
-- [ ] T4-1　`design_handoff/AI Agent Portal.dc.html` と並べて配色・余白・寸法を突き合わせ調整
-- [ ] T4-2　`@keyframes`（seqPulse/consentGlow/bounceDot/blinkCaret 等）の動きを確認
-- [ ] T4-3　進行中セクションの自動スクロール（`data-sec` offsetTop）を確認
-- [ ] T4-4　Playwright スクリーンショットで 5 状態（ログイン/未応答/応答後/コンセント待ち/山田切替後）を記録
+- [x] T4-1　`design_handoff/AI Agent Portal.dc.html` と並べて配色・余白・寸法を突き合わせ調整
+- [x] T4-2　`@keyframes`（seqPulse/consentGlow/bounceDot/blinkCaret 等）の動きを確認
+- [x] T4-3　進行中セクションの自動スクロール（`data-sec` offsetTop）を確認
+- [x] T4-4　Playwright スクリーンショットで 5 状態（ログイン/未応答/応答後/コンセント待ち/山田切替後）を記録
 
 ---
 

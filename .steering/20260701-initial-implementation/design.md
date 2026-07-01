@@ -144,3 +144,13 @@ finish():
 
 - 新規プロジェクトのため既存コードへの破壊的影響なし。
 - 永続ドキュメントの更新は development-guidelines.md §5（テスト方針）のみ。他 `docs/` は変更不要。
+
+---
+
+## 8. 実装上の決定（初回実装で確定）
+
+- **Next.js は 15.x にピン留め**：`architecture.md §1` の指定に合わせ、`create-next-app@latest`（Next 16）ではなく Next 15.5 を採用。
+- **Tailwind は v3.4 を手動導入**：`architecture.md §1` が 3.x 指定のため。`create-next-app` の既定（v4）は使わず `tailwind.config.ts` + `postcss.config.mjs` を手書き。
+- **単一ページ構成（重要）**：`repository-structure.md` は `app/login/page.tsx`・`app/portal/page.tsx` の別ルートを想定していたが、`design_handoff/README.md` が「単一ページ内の screen state で login/portal を切替し、**ログイン→ポータル遷移およびユーザー切替時のチャット履歴を保持**」と明記しているため、`app/page.tsx` 1枚にルート state を集約する構成を採用した。別ルート化すると履歴保持のために追加の状態共有機構が必要になり、デモ挙動と乖離する。
+  - → `repository-structure.md` の該当記述は次回の永続ドキュメント更新時に「単一ページ構成」に合わせて改訂する候補（要承認）。
+- **モックモード**：フェーズ1では `useAgent` が常にモックデータで動作するため、`NEXT_PUBLIC_MOCK_MODE` は実質的に常に true 相当。実接続はフェーズ2（後続作業）で同フック内に分岐実装する。
