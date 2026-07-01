@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   ベースリセット（1920×1080 固定レイアウト前提）
+   ============================================================ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-noto-sans-jp), 'Noto Sans JP', sans-serif;
+  color: #0f172a;
+  background: #f1f5f9;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   .md-body — エージェント回答の Markdown レンダリング
+   （design_handoff/README.md「Design Tokens」より）
+   ============================================================ */
+.md-body > *:first-child {
+  margin-top: 0;
+}
+.md-body > *:last-child {
+  margin-bottom: 0;
+}
+.md-body p {
+  margin: 0 0 12px;
+}
+.md-body strong {
+  font-weight: 700;
+  color: #0f1e3d;
+}
+.md-body code {
+  font-family: 'SFMono-Regular', Consolas, Menlo, monospace;
+  font-size: 0.86em;
+  background: #e7ecf3;
+  color: #1b3a6b;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+.md-body ul {
+  margin: 8px 0 12px;
+  padding-left: 22px;
+}
+.md-body li {
+  margin: 3px 0;
+}
+.md-body table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 14px 0 6px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 11px;
+  overflow: hidden;
+  font-size: 15.5px;
+}
+.md-body thead th {
+  background: #f1f5f9;
+  text-align: left;
+  padding: 11px 15px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+.md-body tbody td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #0f172a;
+  vertical-align: middle;
+}
+.md-body tbody tr:last-child td {
+  border-bottom: none;
+}
+.md-body tbody td:first-child {
+  font-weight: 600;
+}
+.md-body th[align='right'],
+.md-body td[align='right'] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+/* ============================================================
+   @keyframes（design_handoff/README.md「Interactions」より）
+   ============================================================ */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes pulseDot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.82);
+  }
+}
+@keyframes bounceDot {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+  30% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+}
+@keyframes blinkCaret {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes rowIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes consentGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(56, 189, 248, 0);
+  }
+}
+@keyframes seqPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
