@@ -104,3 +104,28 @@ export type SeqSection = {
   tint: string
   messages: SeqMessage[]
 }
+
+// ------------------------------------------------------------
+// 実接続（SSE / トークン）— docs/architecture.md §4 準拠
+// ------------------------------------------------------------
+
+/** /api/agent が SSE で返すイベント */
+export type AgentEvent =
+  | { type: 'flow_update'; step: FlowStepIndex; status: FlowStatus }
+  | { type: 'consent_required'; consentLink: string }
+  | { type: 'text'; content: string }
+  | { type: 'done'; mcpTool: string; sfFilter: string; responseMs: number }
+  | { type: 'error'; message: string }
+
+/** Foundry 用アクセストークン */
+export type TokenSet = {
+  accessToken: string
+  /** epoch ms */
+  expiresOn?: number
+}
+
+/** /api/auth/token（OBO 交換）のレスポンス */
+export type OboTokenResponse = {
+  accessToken: string
+  expiresIn: number
+}
