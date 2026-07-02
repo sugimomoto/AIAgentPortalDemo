@@ -38,5 +38,21 @@ export function getPublicConfig(
   }
 }
 
-/** MSAL / OBO で要求する Foundry スコープ（新 Foundry） */
-export const FOUNDRY_SCOPE = 'https://ai.azure.com/.default'
+/**
+ * OBO の「下流」スコープ（＝Foundry を呼ぶトークンのオーディエンス）。
+ * 新 Foundry は `https://ai.azure.com/.default`。テナント差異があれば
+ * `https://cognitiveservices.azure.com/.default` に切替可能（サーバー env で上書き）。
+ */
+export const FOUNDRY_SCOPE = process.env.FOUNDRY_OBO_SCOPE ?? 'https://ai.azure.com/.default'
+
+/**
+ * OBO の assertion に使う「当アプリが公開する API スコープ」。
+ * OBO 仕様上、assertion トークンの aud は当アプリ自身でなければならないため、
+ * Foundry スコープではなく自アプリの Expose an API スコープを要求する。
+ * 既定は `api://{clientId}/access_as_user`（`NEXT_PUBLIC_API_SCOPE` で上書き可）。
+ */
+export function apiScope(env: Record<string, string | undefined> = process.env): string {
+  if (env.NEXT_PUBLIC_API_SCOPE) return env.NEXT_PUBLIC_API_SCOPE
+  const clientId = env.NEXT_PUBLIC_AZURE_CLIENT_ID
+  return clientId ? `api://${clientId}/access_as_user` : ''
+}

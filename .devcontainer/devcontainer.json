@@ -2,7 +2,8 @@
   "name": "AI Agent Portal (Next.js + Vitest + Playwright)",
   "image": "mcr.microsoft.com/devcontainers/typescript-node:20-bookworm",
   "features": {
-    "ghcr.io/devcontainers/features/git:1": {}
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/azure-cli:1": {}
   },
   "forwardPorts": [3000],
   "portsAttributes": {

@@ -1,7 +1,17 @@
 'use client'
 
 import { PublicClientApplication, type AccountInfo, type Configuration } from '@azure/msal-browser'
-import { FOUNDRY_SCOPE, getPublicConfig } from './config'
+import { apiScope, getPublicConfig } from './config'
+
+/**
+ * ログイン/OBO assertion に要求するスコープ。
+ * OBO 仕様上、assertion の aud は当アプリ自身である必要があるため、
+ * 当アプリが公開する API スコープ（access_as_user）を要求する。
+ */
+function assertionScopes(): string[] {
+  const s = apiScope()
+  return s ? [s] : ['openid', 'profile']
+}
 
 // ============================================================
 // MSAL（ブラウザ）— Entra ID 認証・OBO 用 assertion トークン取得
@@ -46,7 +56,7 @@ async function ensureInitialized(msal: PublicClientApplication): Promise<void> {
 export async function signIn(): Promise<AccountInfo> {
   const msal = getMsalInstance()
   await ensureInitialized(msal)
-  const result = await msal.loginPopup({ scopes: [FOUNDRY_SCOPE] })
+  const result = await msal.loginPopup({ scopes: assertionScopes() })
   msal.setActiveAccount(result.account)
   return result.account
 }
@@ -73,10 +83,10 @@ export async function acquireAssertionToken(): Promise<string> {
   if (!account) throw new Error('サインインが必要です')
 
   try {
-    const res = await msal.acquireTokenSilent({ account, scopes: [FOUNDRY_SCOPE] })
+    const res = await msal.acquireTokenSilent({ account, scopes: assertionScopes() })
     return res.accessToken
   } catch {
-    const res = await msal.acquireTokenPopup({ scopes: [FOUNDRY_SCOPE] })
+    const res = await msal.acquireTokenPopup({ scopes: assertionScopes() })
     return res.accessToken
   }
 }

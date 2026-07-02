@@ -21,16 +21,34 @@
 
 ---
 
-## 1. Entra ID アプリ登録
+## 1. Entra ID アプリ登録（SPA + OBO）
+
+> 重要：Foundry データプレーンの「アクセス可否」自体は **RBAC（§2 の Foundry User ロール）** が本体。
+> 「API のアクセス許可」に `ai.azure.com` という項目は出ない。OBO を成立させるための委任権限を、
+> `ai.azure.com` の実体である **Azure Machine Learning Services**（または Microsoft Cognitive Services）に対して付与する。
 
 1. Azure Portal → **Microsoft Entra ID → アプリの登録 → 新規登録**。
-2. **リダイレクト URI**（SPA）に開発 URL を追加：`http://localhost:3000`（本番ドメインも後で追加）。
-3. **API のアクセス許可**：新 Foundry を呼ぶため、Azure AI 系の委任スコープ（`https://ai.azure.com/.default` 相当）を付与し、必要に応じて管理者同意。
-4. **証明書とシークレット → 新しいクライアントシークレット**を作成（OBO 用。値は一度しか表示されないので控える）。
-5. 取得値を env へ：
+2. **認証 → プラットフォームを追加 → SPA**、リダイレクト URI に `http://localhost:3000`（本番ドメインも後で追加）。
+3. **API の公開（Expose an API）** → スコープ追加：**`access_as_user`**（Application ID URI は既定 `api://{clientId}` でOK）。
+   - これが OBO の assertion（`aud` = 当アプリ）に必要。クライアント側はこのスコープでトークンを取得する。
+4. **API のアクセス許可 → アクセス許可の追加 → 所属する組織で使用している API**：
+   - **Azure Machine Learning Services**（appId `18a66f5f-dbdf-4c17-9dd7-1634712a9cbe`＝`https://ai.azure.com`）→ **委任 → `user_impersonation`**
+   - ※`cognitiveservices.azure.com` を使う場合は代わりに **Microsoft Cognitive Services**（appId `7d312290-28c8-473c-a0ed-8e53749b6d6d`。ポータルは「Cognitive」で検索）→ `user_impersonation`
+   - 追加後、**管理者の同意を付与**。
+5. **証明書とシークレット → 新しいクライアントシークレット**（OBO 用。値は一度しか表示されない）。
+6. 取得値を env へ：
    - `AZURE_TENANT_ID` / `NEXT_PUBLIC_AZURE_TENANT_ID` … ディレクトリ（テナント）ID
    - `AZURE_CLIENT_ID` / `NEXT_PUBLIC_AZURE_CLIENT_ID` … アプリケーション（クライアント）ID
    - `AZURE_CLIENT_SECRET` … 作成したシークレット（**サーバーのみ**）
+   - （任意）`NEXT_PUBLIC_API_SCOPE` … 既定 `api://{clientId}/access_as_user`（未設定で自動導出）
+   - （任意）`FOUNDRY_OBO_SCOPE` … OBO 下流。既定 `https://ai.azure.com/.default`
+
+### トークンの流れ（OBO）
+
+| 段                                | スコープ                          | aud                   |
+| --------------------------------- | --------------------------------- | --------------------- |
+| ① ブラウザ（MSAL）取得＝assertion | `api://{clientId}/access_as_user` | 当アプリ              |
+| ③ サーバーで OBO 交換             | `https://ai.azure.com/.default`   | Foundry(AML Services) |
 
 ---
 
