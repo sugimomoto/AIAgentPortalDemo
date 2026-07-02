@@ -104,9 +104,12 @@
 ## フェーズ 6：仕上げ
 
 - [x] T6-1　テスト方針を永続ドキュメントに反映済み（[development-guidelines.md](../../docs/development-guidelines.md) §5・[architecture.md](../../docs/architecture.md) §9）
-- [ ] T6-2　`README`（起動方法・`stepDelay`/`MOCK_MODE` の切替）整備
-- [ ] T6-3　全テスト green・lint/型チェック通過を確認
+- [x] T6-2　`README`（起動方法・`stepDelay`/`MOCK_MODE` の切替）整備
+- [x] T6-3　全テスト green・lint/型チェック通過を確認
+  - `test` 55件 / `test:e2e` 8件 / `lint` / `typecheck` / `format:check` すべて green
 - [ ] T6-4　デモ通しリハーサル（stepDelay=9500 で12分に収まるか）
+  - ※登壇者による実機通しリハーサル（7/22 予定）で確認する項目。自動テストでは検証不可。
+  - 参考：1クエリの①〜⑤進行は `stepDelay`(9500ms)×5 + 各ステップ間 500ms ≒ 約50秒/クエリ。
 
 ---
 
