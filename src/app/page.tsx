@@ -13,7 +13,12 @@ import { InsideAgentPanel } from '@/components/agent/InsideAgentPanel'
 export default function Page() {
   const auth = useAuth()
   const stepDelay = resolveStepDelay(process.env.NEXT_PUBLIC_STEP_DELAY_MS)
-  const agent = useAgent(auth.user, { stepDelay })
+  // mock 時は getAccessToken 未使用。real 時のみ OBO→Foundry トークン取得に使う。
+  const agent = useAgent(auth.user, {
+    stepDelay,
+    mockMode: auth.mockMode,
+    getAccessToken: auth.mockMode ? undefined : auth.getAccessToken,
+  })
 
   if (auth.screen === 'login') {
     return <LoginScreen onLogin={auth.login} />

@@ -31,9 +31,9 @@
 
 ## フェーズ E：hooks への real 分岐
 
-- [ ] E-1　`useAgent`：options に `mockMode`/`getAccessToken` 追加、`sendReal`/real `approveConsent`（SSE 消費・runId 共有）。**mock 経路は不変**
-- [ ] E-2　`useAuth`：`mockMode` 分岐、real の `signIn`/`getAccessToken` 公開（ペルソナ表示は維持・per-user 実ログインは TODO）
-- [ ] E-3　`app/page.tsx`：mock/real で結線切替（real 時のみ `getAccessToken` を渡す）
+- [x] E-1　`useAgent`：options に `mockMode`/`getAccessToken` 追加、`sendReal`/real `approveConsent`（SSE 消費・runId 共有）。**mock 経路は不変**
+- [x] E-2　`useAuth`：`mockMode` 分岐、real の `signIn`/`getAccessToken` 公開（ペルソナ表示は維持・per-user 実ログインは TODO）
+- [x] E-3　`app/page.tsx`：mock/real で結線切替（real 時のみ `getAccessToken` を渡す）
 
 ## フェーズ F：設定手順・仕上げ
 
