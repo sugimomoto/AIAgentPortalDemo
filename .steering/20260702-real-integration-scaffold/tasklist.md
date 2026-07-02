@@ -21,13 +21,13 @@
 
 ## フェーズ C：API Routes
 
-- [ ] C-1　`app/api/auth/token/route.ts`：`buildOboForm` ＋ token endpoint 交換・シークレットはサーバーのみ
-- [ ] C-2　`app/api/agent/route.ts`：`runAgent` を SSE(`serializeSse`) で返す・error イベントで graceful 終了
+- [x] C-1　`app/api/auth/token/route.ts`：`buildOboForm` ＋ token endpoint 交換・シークレットはサーバーのみ
+- [x] C-2　`app/api/agent/route.ts`：`runAgent` を SSE(`serializeSse`) で返す・error イベントで graceful 終了
 
 ## フェーズ D：lib クライアント（real I/O・型/構造担保）
 
-- [ ] D-1　`lib/msal.ts`：`getMsalInstance`（SSR ガード）/ `signIn` / `acquireAssertionToken`
-- [ ] D-2　`lib/foundry.ts`：`createFoundryClient` / `runAgent`（AgentEvent 生成・実 SDK 部は TODO 明示）
+- [x] D-1　`lib/msal.ts`：`getMsalInstance`（SSR ガード）/ `signIn` / `acquireAssertionToken`
+- [x] D-2　`lib/foundry.ts`：`createFoundryClient` / `runAgent`（AgentEvent 生成・実 SDK 部は TODO 明示）
 
 ## フェーズ E：hooks への real 分岐
 
