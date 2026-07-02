@@ -45,3 +45,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 実接続検証用スクリプト（コミット対象外）
+/probe.mjs
+/agent-def.mjs
+/agent-create.mjs

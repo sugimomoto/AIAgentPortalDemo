@@ -90,49 +90,82 @@ export async function* runAgent(params: RunAgentParams): AsyncGenerator<AgentEve
     }
   }
 
-  const stream = await openai.responses.create({ input: params.prompt, stream: true })
+  // デバッグ：FOUNDRY_DEBUG=true でストリームイベントをサーバーログに出す
+  const debug = process.env.FOUNDRY_DEBUG === 'true'
+  const dlog = (...a: unknown[]) => {
+    if (debug) console.log('[foundry]', ...a)
+  }
 
-  for await (const event of stream) {
-    switch (event.type) {
-      case 'response.output_item.added': {
-        const link = extractConsentLink(event.item)
-        if (link !== null) {
-          // 初回コンセント要求：UI を待機させる
-          yield { type: 'consent_required', consentLink: link }
+  // Foundry の MCP は 1ターン内の「2回目のツール呼び出し」で 500 になる不具合があるため、
+  // ツール呼び出しを 1 回に制限する（既定 1・FOUNDRY_MAX_TOOL_CALLS で調整可、0/空で無制限）。
+  const maxToolCalls = Number(process.env.FOUNDRY_MAX_TOOL_CALLS ?? '1')
+  const limitTools = Number.isFinite(maxToolCalls) && maxToolCalls > 0
+
+  try {
+    const stream = await openai.responses.create({
+      input: params.prompt,
+      stream: true,
+      ...(limitTools ? { max_tool_calls: maxToolCalls } : {}),
+    })
+
+    for await (const event of stream) {
+      dlog('event', event.type)
+      switch (event.type) {
+        case 'response.output_item.added': {
+          const link = extractConsentLink(event.item)
+          if (link !== null) {
+            dlog('consent item', JSON.stringify(event.item))
+            // 初回コンセント要求：UI を待機させる
+            yield { type: 'consent_required', consentLink: link }
+            return
+          }
+          break
+        }
+        case 'response.mcp_call.in_progress':
+        case 'response.mcp_list_tools.in_progress':
+          yield* toStep4()
+          break
+        case 'response.mcp_call.failed':
+        case 'response.mcp_list_tools.failed':
+          console.error('[foundry] MCP 失敗イベント:', JSON.stringify(event))
+          yield { type: 'error', message: `MCP ツール呼び出しに失敗しました（${event.type}）` }
           return
-        }
-        break
+        case 'response.output_text.delta':
+          yield* toStep4()
+          yield { type: 'text', content: event.delta }
+          break
+        case 'response.completed':
+          yield* toStep4()
+          yield { type: 'flow_update', step: 4, status: 'done' }
+          yield { type: 'done', mcpTool, sfFilter: '', responseMs: Date.now() - started }
+          return
+        case 'response.failed':
+          console.error('[foundry] response.failed:', JSON.stringify(event.response?.error))
+          yield {
+            type: 'error',
+            message: event.response?.error?.message ?? 'エージェント実行に失敗しました',
+          }
+          return
+        case 'error':
+          console.error('[foundry] error イベント:', JSON.stringify(event))
+          yield { type: 'error', message: event.message }
+          return
+        default:
+          break
       }
-      case 'response.mcp_call.in_progress':
-      case 'response.mcp_list_tools.in_progress':
-        yield* toStep4()
-        break
-      case 'response.output_text.delta':
-        yield* toStep4()
-        yield { type: 'text', content: event.delta }
-        break
-      case 'response.completed':
-        yield* toStep4()
-        yield { type: 'flow_update', step: 4, status: 'done' }
-        yield {
-          type: 'done',
-          mcpTool,
-          sfFilter: '',
-          responseMs: Date.now() - started,
-        }
-        return
-      case 'response.failed':
-        yield {
-          type: 'error',
-          message: event.response?.error?.message ?? 'エージェント実行に失敗しました',
-        }
-        return
-      case 'error':
-        yield { type: 'error', message: event.message }
-        return
-      default:
-        // その他のイベントは可視化しない
-        break
+    }
+  } catch (e) {
+    // OpenAI SDK が投げた例外（Foundry 500 等）の全容をサーバーログに出す
+    const err = e as { status?: number; message?: string; error?: unknown; requestID?: string }
+    console.error('[foundry] stream 例外:', {
+      status: err.status,
+      message: err.message,
+      requestID: err.requestID,
+      error: err.error,
+    })
+    yield {
+      type: 'error',
+      message: err.message ?? 'エージェント実行中に例外が発生しました',
     }
   }
 }

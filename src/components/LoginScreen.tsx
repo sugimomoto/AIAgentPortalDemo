@@ -2,7 +2,7 @@
 
 import { BrandLogo, MicrosoftLogo } from '@/components/icons'
 
-export function LoginScreen({ onLogin }: { onLogin: () => void }) {
+export function LoginScreen({ onLogin, error }: { onLogin: () => void; error?: string | null }) {
   return (
     <main
       style={{
@@ -59,6 +59,25 @@ export function LoginScreen({ onLogin }: { onLogin: () => void }) {
           <MicrosoftLogo size={18} />
           Microsoft アカウントでログイン
         </button>
+
+        {error && (
+          <p
+            role="alert"
+            style={{
+              fontSize: 13,
+              color: '#B91C1C',
+              background: '#FEE2E2',
+              border: '1px solid #FCA5A5',
+              borderRadius: 8,
+              padding: '8px 12px',
+              marginTop: 16,
+              textAlign: 'left',
+              wordBreak: 'break-word',
+            }}
+          >
+            {error}
+          </p>
+        )}
 
         <p style={{ fontSize: 12, color: '#94A3B8', marginTop: 36 }}>
           Powered by Microsoft Foundry × CData Connect AI

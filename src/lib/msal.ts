@@ -52,13 +52,42 @@ async function ensureInitialized(msal: PublicClientApplication): Promise<void> {
   }
 }
 
-/** ログイン（ポップアップ）。成功すると AccountInfo を返す */
-export async function signIn(): Promise<AccountInfo> {
+/**
+ * 起動時ブートストラップ。メイン窓・ポップアップ窓の両方で実行する。
+ * - initialize 後に handleRedirectPromise でリダイレクト/ポップアップ応答（#code）を消費
+ * - 既存アカウントがあれば active に設定して返す
+ * ポップアップ窓側では handleRedirectPromise が応答を opener に中継する。
+ */
+export async function bootstrap(): Promise<AccountInfo | null> {
   const msal = getMsalInstance()
   await ensureInitialized(msal)
-  const result = await msal.loginPopup({ scopes: assertionScopes() })
-  msal.setActiveAccount(result.account)
-  return result.account
+  try {
+    const result = await msal.handleRedirectPromise()
+    if (result?.account) {
+      msal.setActiveAccount(result.account)
+      return result.account
+    }
+  } catch {
+    // ポップアップ由来で残ったハッシュ等でキャッシュ不一致になることがある。
+    // 無視して既存アカウント確認にフォールバックし、残存ハッシュを掃除する。
+    if (typeof window !== 'undefined' && /(?:code|error|state)=/.test(window.location.hash)) {
+      window.history.replaceState(null, '', window.location.pathname + window.location.search)
+    }
+  }
+  const existing = msal.getActiveAccount() ?? msal.getAllAccounts()[0] ?? null
+  if (existing) msal.setActiveAccount(existing)
+  return existing
+}
+
+/**
+ * ログイン（リダイレクト）。ページ全体が Entra へ遷移し、戻り時に bootstrap の
+ * handleRedirectPromise が応答を処理する。ポップアップ監視の不安定さを避けるため
+ * リダイレクト方式を採用。
+ */
+export async function signIn(): Promise<void> {
+  const msal = getMsalInstance()
+  await ensureInitialized(msal)
+  await msal.loginRedirect({ scopes: assertionScopes() })
 }
 
 export function getActiveAccount(): AccountInfo | null {
@@ -69,7 +98,7 @@ export function getActiveAccount(): AccountInfo | null {
 export async function signOut(): Promise<void> {
   const msal = getMsalInstance()
   await ensureInitialized(msal)
-  await msal.logoutPopup()
+  await msal.logoutRedirect()
 }
 
 /**
@@ -82,11 +111,8 @@ export async function acquireAssertionToken(): Promise<string> {
   const account = msal.getActiveAccount() ?? msal.getAllAccounts()[0]
   if (!account) throw new Error('サインインが必要です')
 
-  try {
-    const res = await msal.acquireTokenSilent({ account, scopes: assertionScopes() })
-    return res.accessToken
-  } catch {
-    const res = await msal.acquireTokenPopup({ scopes: assertionScopes() })
-    return res.accessToken
-  }
+  // ログイン時に同スコープを同意済みのため silent で取得できる想定。
+  // 失敗時は再ログインを促す（送信処理を中断させないため redirect/popup はしない）。
+  const res = await msal.acquireTokenSilent({ account, scopes: assertionScopes() })
+  return res.accessToken
 }

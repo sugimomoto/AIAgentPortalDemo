@@ -21,7 +21,7 @@ export default function Page() {
   })
 
   if (auth.screen === 'login') {
-    return <LoginScreen onLogin={auth.login} />
+    return <LoginScreen onLogin={auth.login} error={auth.error} />
   }
 
   const handleLogout = () => {

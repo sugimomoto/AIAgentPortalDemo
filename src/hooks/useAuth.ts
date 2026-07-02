@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import type { User, UserKey } from '@/lib/types'
 import { DEFAULT_USER_KEY, USERS } from '@/lib/mockData'
 import { isMockMode } from '@/lib/config'
@@ -26,6 +26,25 @@ export function useAuth(options: UseAuthOptions = {}) {
   const [screen, setScreen] = useState<Screen>('login')
   const [userKey, setUserKey] = useState<UserKey>(DEFAULT_USER_KEY)
   const [error, setError] = useState<string | null>(null)
+
+  // 実接続：起動時に MSAL を初期化し、リダイレクト/ポップアップ応答（#code）を消費。
+  // 既にサインイン済みならポータルへ。
+  useEffect(() => {
+    if (mockMode) return
+    let cancelled = false
+    void (async () => {
+      try {
+        const { bootstrap } = await import('@/lib/msal')
+        const account = await bootstrap()
+        if (!cancelled && account) setScreen('portal')
+      } catch (e) {
+        if (!cancelled) setError(e instanceof Error ? e.message : '認証の初期化に失敗しました')
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [mockMode])
 
   const login = useCallback(() => {
     if (mockMode) {
