@@ -37,10 +37,10 @@
 
 ## フェーズ F：設定手順・仕上げ
 
-- [ ] F-1　`.env.local.example` 拡充（コメント・real 切替手順）
-- [ ] F-2　`docs/setup-real-integration.md`：Entra アプリ登録・Foundry Project endpoint・CData Custom OAuth の要点
-- [ ] F-3　全チェック green：`test`（既存＋新規）/ `test:e2e`（MOCK）/ `lint` / `typecheck` / `build`
-- [ ] F-4　`architecture.md §4` に SSE イベント形/フォールバックを軽微追記（必要時）
+- [x] F-1　`.env.local.example` 拡充（コメント・real 切替手順）
+- [x] F-2　`docs/setup-real-integration.md`：Entra アプリ登録・Foundry Project endpoint・CData Custom OAuth の要点
+- [x] F-3　全チェック green：`test`（既存＋新規）/ `test:e2e`（MOCK）/ `lint` / `typecheck` / `build`
+- [x] F-4　`architecture.md §4` に SSE イベント形/フォールバックを軽微追記（必要時）
 
 ---
 

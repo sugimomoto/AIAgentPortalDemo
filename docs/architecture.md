@@ -148,7 +148,17 @@ Foundry Agent Service を呼び出し、フロー状態・コンセント要求�
   sfFilter: string
   responseMs: number
 }
+
+// エラー（設定不足・接続失敗等。graceful に UI へ表示）
+{
+  type: 'error'
+  message: string
+}
 ```
+
+> フォールバック：実接続で `error` を受信した場合、UI はエラーメッセージを表示する。
+> `useAgent` の `fallbackToMock`（既定 off）を有効にすると、失敗時にモック回答へ切り替える（デモ保険）。
+> 型は `src/lib/types.ts` の `AgentEvent`、直列化/パースは `src/lib/sse.ts` を参照。
 
 ---
 
