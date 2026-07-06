@@ -82,20 +82,13 @@ export function useAuth(options: UseAuthOptions = {}) {
   const selectUser = useCallback((key: UserKey) => setUserKey(key), [])
 
   /**
-   * 実接続用：ユーザー Access Token を取得し、OBO で Foundry 用トークンに交換して返す。
-   * useAgent の getAccessToken として渡す。
+   * 実接続用：①ユーザー Access Token（aud=api://{clientId}）を返す。
+   * OBO→②の交換はサーバー（/api/agent）が内部で行うため、ここでは①をそのまま返す。
+   * useAgent の getAccessToken として渡し、Bearer①で /api/agent を呼ぶ。
    */
   const getAccessToken = useCallback(async (): Promise<string> => {
     const { acquireAssertionToken } = await import('@/lib/msal')
-    const assertion = await acquireAssertionToken()
-    const res = await fetch('/api/auth/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ assertion }),
-    })
-    if (!res.ok) throw new Error(`OBO トークン交換に失敗しました (${res.status})`)
-    const json = (await res.json()) as { accessToken: string }
-    return json.accessToken
+    return acquireAssertionToken()
   }, [])
 
   const user: User = USERS[userKey]

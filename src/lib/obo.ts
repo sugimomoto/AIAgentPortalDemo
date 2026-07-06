@@ -1,4 +1,5 @@
 import { FOUNDRY_SCOPE } from './config'
+import type { OboTokenResponse } from './types'
 
 // ============================================================
 // Entra On-Behalf-Of（OBO）トークン交換のリクエスト組立（純粋関数）
@@ -30,4 +31,22 @@ export function buildOboForm(params: OboParams): URLSearchParams {
   form.set('scope', params.scope ?? FOUNDRY_SCOPE)
   form.set('requested_token_use', 'on_behalf_of')
   return form
+}
+
+/**
+ * OBO 交換を実行し、下流（既定 Foundry）用アクセストークンを取得する。
+ * client_secret を使うためサーバーサイド専用。失敗時は例外を投げる。
+ */
+export async function exchangeOboToken(params: OboParams): Promise<OboTokenResponse> {
+  const res = await fetch(oboTokenEndpoint(params.tenantId), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: buildOboForm(params),
+  })
+  if (!res.ok) {
+    const detail = await res.text().catch(() => '')
+    throw new Error(`OBO トークン交換に失敗しました (${res.status}) ${detail}`)
+  }
+  const json = (await res.json()) as { access_token: string; expires_in: number }
+  return { accessToken: json.access_token, expiresIn: json.expires_in }
 }

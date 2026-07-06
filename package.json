@@ -19,6 +19,7 @@
     "@azure/ai-projects": "^2.2.0",
     "@azure/core-auth": "^1.10.1",
     "@azure/msal-browser": "^5.16.0",
+    "jose": "^6.2.3",
     "next": "15.5.19",
     "react": "19.1.0",
     "react-dom": "19.1.0",

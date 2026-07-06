@@ -228,7 +228,15 @@ export function useAgent(user: User, options: UseAgentOptions = {}) {
       } catch (e) {
         return handleRealError(e instanceof Error ? e.message : 'エージェント呼び出しに失敗', id)
       }
-      if (!res.ok || !res.body) return handleRealError(`エージェント応答エラー (${res.status})`, id)
+      if (!res.ok || !res.body) {
+        // 認証(401)/権限(403)/OBO(502) 等はサーバーが JSON {error} を返す
+        const detail = await res
+          .clone()
+          .json()
+          .then((j: { error?: string }) => j.error)
+          .catch(() => undefined)
+        return handleRealError(detail ?? `エージェント応答エラー (${res.status})`, id)
+      }
 
       let agentMsgId: string | null = null
       for await (const ev of parseSse(res.body)) {

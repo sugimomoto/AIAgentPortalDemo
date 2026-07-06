@@ -14,13 +14,13 @@
 
 ## 検証の5項目（Microsoft 公式）
 
-| 検証 | クレーム | 失敗時 |
-| --- | --- | --- |
-| 署名（JWKS） | `kid` で鍵特定 | 401 |
-| Audience | `aud == api://{clientId}` | 401 |
-| Issuer | `iss == https://login.microsoftonline.com/{tid}/v2.0` | 401 |
-| 有効期間 | `exp` / `nbf` | 401 |
-| スコープ | `scp` に `access_as_user` | 403 |
+| 検証         | クレーム                                              | 失敗時 |
+| ------------ | ----------------------------------------------------- | ------ |
+| 署名（JWKS） | `kid` で鍵特定                                        | 401    |
+| Audience     | `aud == api://{clientId}`                             | 401    |
+| Issuer       | `iss == https://login.microsoftonline.com/{tid}/v2.0` | 401    |
+| 有効期間     | `exp` / `nbf`                                         | 401    |
+| スコープ     | `scp` に `access_as_user`                             | 403    |
 
 ## シーケンス図
 
@@ -87,11 +87,11 @@ sequenceDiagram
 
 ## 2. ホスト（アプリ）の自己証明はどこで行うか
 
-| 主体 | プロセス | 証明手段 |
-| --- | --- | --- |
-| ユーザー | ① ログイン（ブラウザ） | 資格情報＋MFA |
-| **アプリ（ホスト）** | **② OBO 交換（サーバー `/api/auth/token`）** | **`client_id` + `client_secret`** |
-| アプリ → Foundry | Foundry 呼び出し | ②のトークン（Entra 署名が信頼の根拠） |
+| 主体                 | プロセス                                   | 証明手段                              |
+| -------------------- | ------------------------------------------ | ------------------------------------- |
+| ユーザー             | ① ログイン（ブラウザ）                     | 資格情報＋MFA                         |
+| **アプリ（ホスト）** | **② OBO 交換（サーバー `/api/agent` 内）** | **`client_id` + `client_secret`**     |
+| アプリ → Foundry     | Foundry 呼び出し                           | ②のトークン（Entra 署名が信頼の根拠） |
 
 - **SPA はホスト自己証明力が弱い**：ブラウザに秘密を置けない（パブリッククライアント）ため、`client_secret` を持てない。
   代わりに **登録済み redirect_uri ＋ PKCE ＋ オリジン制限**で補うが、これは「アプリ本人の暗号的証明」ではない。
@@ -102,13 +102,13 @@ sequenceDiagram
 
 ## 3. 認可の積層（本ケースは 4〜5 レイヤー）
 
-| # | レイヤー | 何を認可するか | 仕組み | 効く場所 |
-| --- | --- | --- | --- | --- |
-| 1 | 自 API の利用 | ユーザーが当 API を呼べるか | ①の `scp=access_as_user`（＋`aud`） | `/api/agent` のトークン検証 |
-| 2 | OBO 発行 | Foundry 用②を発行してよいか | アプリの委任許可 `user_impersonation` ＋同意 | Entra の OBO 交換 |
-| 3 | Foundry 実行 | そのユーザーが Foundry を使えるか | Azure RBAC `Foundry User` | Foundry データプレーン |
-| 4 | CData 接続の利用 | コネクタ経由で下流に行けるか | per-user OAuth 同意（`oauth_consent_request`） | CData / Logic Apps コネクタ |
-| 5 | Salesforce データ（行レベル） | どの商談まで見えるか | SF のプロファイル/共有ルール | Salesforce 本体 |
+| #   | レイヤー                      | 何を認可するか                    | 仕組み                                         | 効く場所                    |
+| --- | ----------------------------- | --------------------------------- | ---------------------------------------------- | --------------------------- |
+| 1   | 自 API の利用                 | ユーザーが当 API を呼べるか       | ①の `scp=access_as_user`（＋`aud`）            | `/api/agent` のトークン検証 |
+| 2   | OBO 発行                      | Foundry 用②を発行してよいか       | アプリの委任許可 `user_impersonation` ＋同意   | Entra の OBO 交換           |
+| 3   | Foundry 実行                  | そのユーザーが Foundry を使えるか | Azure RBAC `Foundry User`                      | Foundry データプレーン      |
+| 4   | CData 接続の利用              | コネクタ経由で下流に行けるか      | per-user OAuth 同意（`oauth_consent_request`） | CData / Logic Apps コネクタ |
+| 5   | Salesforce データ（行レベル） | どの商談まで見えるか              | SF のプロファイル/共有ルール                   | Salesforce 本体             |
 
 - 4 と 5 を「下流データアクセス」とまとめれば 4 レイヤー、Salesforce 行レベルを独立で数えれば 5 レイヤー。
 - **5 番目がデモの主役**：identity passthrough により、ユーザーが変われば見える商談が変わる（RBAC の可視化）。
