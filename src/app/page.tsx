@@ -8,8 +8,6 @@ import { Header } from '@/components/layout/Header'
 import { ChatPanel } from '@/components/chat/ChatPanel'
 import { InsideAgentPanel } from '@/components/agent/InsideAgentPanel'
 
-// design_handoff の設計どおり、単一ページ内の screen state（login/portal）で切替する。
-// これによりログイン→ポータル、ユーザー切替時のチャット履歴を保持できる。
 export default function Page() {
   const auth = useAuth()
   const stepDelay = resolveStepDelay(process.env.NEXT_PUBLIC_STEP_DELAY_MS)
@@ -29,9 +27,14 @@ export default function Page() {
     auth.logout()
   }
 
+  const handleSelectUser = (key: Parameters<typeof auth.selectUser>[0]) => {
+    agent.reset()
+    auth.selectUser(key)
+  }
+
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      <Header user={auth.user} onSelectUser={auth.selectUser} onLogout={handleLogout} />
+      <Header user={auth.user} onSelectUser={handleSelectUser} onLogout={handleLogout} />
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         <ChatPanel
           messages={agent.messages}
