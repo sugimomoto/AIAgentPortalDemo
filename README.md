@@ -17,7 +17,7 @@
 
 ## デモ動画
 
-<video src="docs/images/screens/マイビデオ-1.mp4" controls width="100%"></video>
+<video src="https://github.com/user-attachments/assets/c9d7f9ca-e3dc-49a7-a73a-484aea215992" controls width="100%"></video>
 
 ## 技術スタック
 
