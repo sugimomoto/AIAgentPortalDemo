@@ -15,6 +15,10 @@
 | ----------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
 | ![login](docs/images/screens/1-login.png) | ![answered](docs/images/screens/4-answered-tanaka.png) | ![consent](docs/images/screens/3-consent-waiting.png) |
 
+## デモ動画
+
+<video src="docs/images/screens/マイビデオ-1.mp4" controls width="100%"></video>
+
 ## 技術スタック
 
 - Next.js 15（App Router） / React 19 / TypeScript strict
